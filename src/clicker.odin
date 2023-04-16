@@ -79,12 +79,8 @@ set_max_cps :: proc "c" (btn: MOUSE_BUTTON, max: uint) {
 @export
 max_cps :: proc "c" (btn: MOUSE_BUTTON) -> uint {
     switch btn {
-        case .right: {
-            return MAX_RIGHT
-        }
-        case .left: {
-            return MAX_LEFT
-        }
+        case .right: return MAX_RIGHT
+        case .left: return MAX_LEFT
     }
     return 0
 }
@@ -92,12 +88,8 @@ max_cps :: proc "c" (btn: MOUSE_BUTTON) -> uint {
 @export
 min_cps :: proc "c" (btn: MOUSE_BUTTON) -> uint {
     switch btn {
-        case .right: {
-            return MIN_RIGHT
-        }
-        case .left: {
-            return MIN_LEFT
-        }
+        case .right: return MIN_RIGHT
+        case .left: return MIN_LEFT
     }
     return 0
 }
@@ -113,12 +105,8 @@ set_toggle :: proc "c" (btn: MOUSE_BUTTON, toggle: u32) {
 @export
 set_toggle_proc :: proc "c" (btn: MOUSE_BUTTON, prc: Procedure) {
     switch btn {
-        case .right: {
-            TOGGLE_PROC_RIGHT = prc
-        }
-        case .left: {
-            TOGGLE_PROC_LEFT = prc
-        }
+        case .right: TOGGLE_PROC_RIGHT = prc
+        case .left: TOGGLE_PROC_LEFT = prc
     }
 }
 
@@ -145,7 +133,11 @@ exit_dll :: proc "c" () {
 }
 
 focused :: proc () -> bool {
-    return windows.GetForegroundWindow() == windows.FindWindowA(nil, "Minecraft")
+    minecraft := windows.FindWindowA(nil, "Minecraft")
+    if minecraft == nil {
+        return false
+    }
+    return windows.GetForegroundWindow() == minecraft
 }
 
 @export
