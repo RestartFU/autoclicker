@@ -221,7 +221,6 @@ namespace Clicker
 			this->PerformLayout();
 		}
 #pragma endregion
-		void tick_toggle();
 		private: void minimum_slider_value_change(System::Object^, System::EventArgs^)
 		{
 			if (this->minimumSlider->Value > this->maximumSlider->Value)
