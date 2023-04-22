@@ -151,11 +151,6 @@ start_clicker :: proc "c" () {
                 MOUSE_DOWN_LEFT = true
             } else if wParam == 0x202 {
                 MOUSE_DOWN_LEFT = false
-            } else if wParam == 0x0204 {
-                FIRST_CLICK_RIGHT = true
-                MOUSE_DOWN_RIGHT = true
-            } else if wParam == 0x0205 {
-                MOUSE_DOWN_RIGHT = false
             }
           }
         },
@@ -167,11 +162,6 @@ start_clicker :: proc "c" () {
                     TOGGLED_LEFT = !TOGGLED_LEFT
                     if TOGGLE_PROC_LEFT != nil {
                         TOGGLE_PROC_LEFT()
-                    }
-                } else if kstruct.vkCode == TOGGLE_RIGHT {
-                    TOGGLED_RIGHT = !TOGGLED_RIGHT
-                    if TOGGLE_PROC_RIGHT != nil {
-                        TOGGLE_PROC_RIGHT()
                     }
                 }
             }
@@ -196,21 +186,6 @@ start_clicker :: proc "c" () {
                     send_mouse_input(0x004)
                     send_mouse_input(0x002)
                     LAST_CLICK_LEFT = time.now()
-                }
-            }
-            time.sleep(1 * time.Millisecond)
-        }
-    })
-    thread.create_and_start(proc(^thread.Thread) {
-        for {
-            if TOGGLED_RIGHT && MOUSE_DOWN_RIGHT {
-                if FIRST_CLICK_RIGHT {
-                    time.sleep(time.Millisecond * 30)
-                    FIRST_CLICK_RIGHT = false
-                } else if focused() && (time.Duration(time.now()._nsec - LAST_CLICK_RIGHT._nsec) > time.Duration( 1000 / rand_int(MIN_RIGHT, MAX_RIGHT)) * time.Millisecond) {
-                    send_mouse_input(0x0010)
-                    send_mouse_input(0x0008)
-                    LAST_CLICK_RIGHT = time.now()
                 }
             }
             time.sleep(1 * time.Millisecond)
